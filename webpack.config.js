@@ -1,4 +1,5 @@
 const path = require('path');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: './src/app.js',
@@ -14,32 +15,27 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(scss)$/,
-        use: [
-          {
-            // Adds CSS to the DOM by injecting a `<style>` tag
-            loader: 'style-loader'
-          },
-          {
-            // Interprets `@import` and `url()` like `import/require()` and will resolve them
-            loader: 'css-loader'
-          },
-          {
-            // Loader for webpack to process CSS with PostCSS
-            loader: 'postcss-loader',
-            options: {
-              plugins: function () {
-                return [
-                  require('autoprefixer')
-                ];
-              }
+        test:/\.(s*)css$/, 
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+                loader: 'css-loader',
+                options: {
+                    // If you are having trouble with urls not resolving add this setting.
+                    // See https://github.com/webpack-contrib/css-loader#url
+                    minimize: true,
+                    sourceMap: true
+                }
+            }, 
+            {
+                loader: 'sass-loader',
+                options: {
+                    sourceMap: true
+                }
             }
-          },
-          {
-            // Loads a SASS/SCSS file and compiles it to CSS
-            loader: 'sass-loader'
-          }
-        ]
+          ]
+        })
       },
       {
         test: /\.(png|jpg|gif)$/,
@@ -54,5 +50,12 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
+  plugins: [
+    new ExtractTextPlugin('style.css')
+    //if you want to pass in options, you can do so:
+    //new ExtractTextPlugin({
+    //  filename: 'style.css'
+    //})
+  ]
 };
