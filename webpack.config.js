@@ -11,7 +11,7 @@ module.exports = {
     compress: true,
     watchContentBase: true
   },
-  watch:true,
+  watch: true,
   module: {
     rules: [
       {
@@ -39,6 +39,18 @@ module.exports = {
           {
             // Loads a SASS/SCSS file and compiles it to CSS
             loader: 'sass-loader'
+          }
+        ]
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8000, // Convert images < 8kb to base64 strings
+              name: 'images/[hash]-[name].[ext]'
+            }
           }
         ]
       }
