@@ -11,7 +11,6 @@ module.exports = {
     compress: true,
     watchContentBase: true
   },
-  watch: true,
   module: {
     rules: [
       {
